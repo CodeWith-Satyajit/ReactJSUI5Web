@@ -1,0 +1,80 @@
+_schema-version: "3.2"
+ID: reactwithcap01
+version: 0.0.1
+modules:
+- name: reactwithcap01-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: reactwithcap01-destination-service
+    parameters:
+      content-target: true
+  - name: reactwithcap01_html_repo_host
+    parameters:
+      service-key:
+        name: reactwithcap01_html_repo_host-key
+  - name: uaa_reactwithcap01
+    parameters:
+      service-key:
+        name: uaa_reactwithcap01-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: com_sn_reactwithcap01_reactwithcap01_html_repo_host
+          ServiceInstanceName: reactwithcap01-html5-app-host-service
+          ServiceKeyName: reactwithcap01_html_repo_host-key
+          sap.cloud.service: com.sn.reactwithcap01
+        - Authentication: OAuth2UserTokenExchange
+          Name: com_sn_reactwithcap01_uaa_reactwithcap01
+          ServiceInstanceName: reactwithcap01-xsuaa-service
+          ServiceKeyName: uaa_reactwithcap01-key
+          sap.cloud.service: com.sn.reactwithcap01
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
+- name: reactwithcap01_ui_deployer
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: reactwithcap01_html_repo_host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - reactmodule01-content.zip
+      name: reactmodule01
+      target-path: resources/
+- name: reactmodule01
+  type: html5
+  path: reactmodule01
+  build-parameters:
+    builder: custom
+    commands:
+    - npm install
+    - npm run build
+    supported-platforms: []
+resources:
+- name: reactwithcap01-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      version: 1.0.0
+    service: destination
+    service-name: reactwithcap01-destination-service
+    service-plan: lite
+- name: reactwithcap01_html_repo_host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: reactwithcap01-html5-app-host-service
+    service-plan: app-host
+- name: uaa_reactwithcap01
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: reactwithcap01-xsuaa-service
+    service-plan: application

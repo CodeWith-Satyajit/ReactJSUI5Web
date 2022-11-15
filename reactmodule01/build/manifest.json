@@ -1,0 +1,11 @@
+{
+  "sap.app": {
+    "id": "reactmodule01",
+    "applicationVersion": {
+      "version": "1.0.0"
+    }
+  },
+  "sap.cloud": {
+    "service": "com.sn.reactwithcap01"
+  }
+}
