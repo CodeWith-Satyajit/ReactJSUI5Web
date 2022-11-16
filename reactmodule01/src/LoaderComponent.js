@@ -89,7 +89,7 @@ const LoaderComponent = () => {
                     {data.map(function (value) {
                         return (
                             <TableRow>
-                                <TableCell>{value.ProductID}</TableCell>
+                                <TableCell style={{alignContent:'start'}}>{value.ProductID}</TableCell>
                                 <TableCell>{value.ProductName}</TableCell>
                                 <TableCell>{value.UnitPrice}</TableCell>
                                 <TableCell>{value.UnitsInStock}</TableCell>
